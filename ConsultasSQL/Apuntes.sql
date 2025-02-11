@@ -1,7 +1,25 @@
-AVG - media
-MIN/MAX
-COUNT - Cuenta
+SELECT genero,
+    MIN(precio) AS precio_minimo,
+    MAX(precio) AS precio_maximo,
+    AVG(precio) AS precio_promedio
+FROM videoclub.peliculas
+GROUP BY genero;
+
+COUNT - Contar
 SUM - Suma
+CONCAT
+
+La cláusula HAVING en SQL se utiliza para filtrar los grupos de resultados que se generan mediante la cláusula
+GROUP BY. A diferencia de la cláusula WHERE, que filtra filas individuales antes de agrupar los datos,
+HAVING filtra después de que se han aplicado las funciones de agregación (como COUNT(), SUM(), AVG(), etc.).
+
+Por ejemplo, en la siguiente consulta:
+
+SELECT genero,
+       COUNT(*) AS "TOTAL PELICULAS"
+FROM videoclub.peliculas
+GROUP BY genero
+HAVING COUNT(*) > 1;
 
 SELECT titulo, FECHAPUBLICACION, NOMBREGENERO FROM videoclub.Peliculas AS A
 JOIN videoclub.Generos AS B ON A.GENERO = B.CODIGOGENERO
@@ -26,8 +44,9 @@ WHERE titulo REGEXP "[0-9]"; /* muestra al menos un caracter numerico*/
 
 SELECT TITULO, FECHAPUBLICACION FROM videoclub.Peliculas AS A
 WHERE titulo REGEXP '^[CDEFGHPQRSTUV]';
-/*REGEXP: Busca coincidencias basadas en una expresión regular.
+
+REGEXP: Busca coincidencias basadas en una expresión regular.
 ^[CDEFGHPQRSTUV]: Busca títulos que comienzan (^) con cualquiera de las letras en el conjunto especificado
 ^: Marca el inicio de la cadena.
 $: Marca el final de la cadena.
-[ ]: Define un conjunto de caracteres permitidos o prohibidos.*/
+[ ]: Define un conjunto de caracteres permitidos o prohibidos.
