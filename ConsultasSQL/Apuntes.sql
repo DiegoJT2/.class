@@ -50,3 +50,18 @@ REGEXP: Busca coincidencias basadas en una expresión regular.
 ^: Marca el inicio de la cadena.
 $: Marca el final de la cadena.
 [ ]: Define un conjunto de caracteres permitidos o prohibidos.
+
+/*CASE*/
+SELECT jobtitle
+CASE gender WHEN "M" THEN "MALE" WHEN "F" THEN "FEMALE" ELSE "unknown" VALUE End
+FROM HumanResources.Employee
+
+Pablo20? [a-zA-Z]+ 1 o mas caracteres
+Pablo20? [a-zA-Z]{6} solo 6
+Pablo20? [a-zA-Z]{6,} 6 o +
+Pablo20? [a-zA-Z]{6,10} de 6 a 10
+Pablo20? [a-zA-Z]+[0-9]+[\\?] solo admite 1 interrogante, doble barra porque si no es una funcion especial
+Pablo20? ([a-zA-Z]+) obliga a que este al principio
+[]rango ()exacto
+^([a-z]+)[\.]([a-z]+)([0-9]{2})(\@)zaragoza(\.)salesianos(\.)edu$
+jaraba.tudie19@zaragoza.salesianos.edu
