@@ -1,0 +1,41 @@
+<html>
+<head>
+       <title>Movimiento</title>
+<style type="text/css">
+#cruz{
+	position:absolute;
+	top:400px;
+	left:500px;
+
+}
+#circulo{
+	position:absolute;
+	top:200px;
+	left:100px;
+</style>
+<script language="JavaScript">
+objeto=null;
+ejez=2;
+function cargar(){
+	if(event.srcElement.tagName == "IMG") { 
+		objeto = event.srcElement;
+		objeto.style.zIndex = ejez;
+		ejez++;
+	} // Agrega la llave de cierre aquí
+}
+function mover(){
+	if(objeto != null){
+		objeto.style.left = event.x-50;
+		objeto.style.top = event.y-50;
+	}
+}
+function soltar(){
+	objeto=null;
+}
+</script>
+</head>
+<body onmousedown="cargar()" onmousemove="mover(); event.returnValue=false" onmouseup="soltar()">
+<img id="cruz" src="imagenes/cruz.jpg" height="100">
+<img id="circulo" src="imagenes/circulo.webp" height="100">
+</body>
+</html>

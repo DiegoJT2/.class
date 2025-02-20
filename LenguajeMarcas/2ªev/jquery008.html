@@ -1,0 +1,24 @@
+<html>
+<head>
+	<title>Crear un objeto y meterlo en el body</title>
+
+<script type="text/javascript" src="jquery-1.11.2.min.js"></script>
+<script language="JavaScript">
+//ready=onload  click=onClick  $(nombre sin comillas si ya estaba creado ej:window/document/...)  $("div/img/...")  $("#nombre")a un objeto unico como id/value
+	$(document).ready(function(){
+		var imagen = $("<img>"/*clave*/, /*valor*/{src:"imagenes/papelera.jpg", id:"imagen", //JSON clave-valor
+				css:{"padding":"2xp", "cursor":"pointer"},
+				click:function(e){
+					document.location="jquery007.html";
+				}
+			});
+		$("#boton").click(function(){
+			$("body").append(imagen);
+		});
+	});
+</script>
+</head>
+<body>
+<input type="button" id="boton" value="Incorporar objeto"></input>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!--get devolver, set modificar-->
+<!--(condicion)"true"?____"false":____-->
+<!--otros: iff(__)?__:__	SiInm(__)?__:__-->
+<html>
+<head>
+       <title>Calculadora</title>
+
+<script language="JavaScript">
+function operar(){
+	switch(operacion.value){
+		case "+":
+			resultado.innerHTML = parseFloat(operando1.value) + parseFloat(operando2.value);
+			break;
+		case "-":
+			resultado.innerHTML = parseFloat(operando1.value) - parseFloat(operando2.value);
+			break;
+		case "*":
+			resultado.innerHTML = parseFloat(operando1.value) * parseFloat(operando2.value);
+			break;
+		case "/":
+			resultado.innerHTML = parseFloat(operando1.value) / parseFloat(operando2.value);
+			break;
+	}
+}
+</script>
+</head>
+<body>
+<h1 align="center">Calculadora</h1>
+<table align="center" border="1">
+<tr>
+	<td><input type="text" id="operando1"></td>
+	<td><select id="operacion">
+		<option value="+">+</option>
+		<option value="-">-</option>
+		<option value="*">*</option>
+		<option value="/">/</option>
+	</select></td>
+	<td><input type="text" id="operando2"></td>
+	<td><input type="button" value="=" onclick="operar()"></td>
+	<td id="resultado" width=100></td>
+</tr>
+</table>
+</body>
+</html>

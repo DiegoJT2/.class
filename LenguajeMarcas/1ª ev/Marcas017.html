@@ -1,0 +1,30 @@
+<!--get devolver, set modificar-->
+<!--(condicion)"true"?____"false":____-->
+<!--iff(__)?__:__	SiInm(__)?__:__-->
+<html>
+<head>
+       <title>Reloj digital</title>
+
+<script language="JavaScript">
+function reloj(){
+	var fecha = new Date();
+	var horaStr ="";
+
+	horaStr=((fecha.getHours()<10)?"0":"")+fecha.getHours()+":";
+	horaStr+=((fecha.getMinutes()<10)?"0":"")+fecha.getMinutes()+":";
+	horaStr+=((fecha.getSeconds()<10)?"0":"")+fecha.getSeconds();
+
+	cadena.value=horaStr;
+}
+function parar(){
+	clearInterval(intervalo);
+}
+</script>
+</head>
+<body onload="intervalo=setInterval('reloj()', 1000)">
+<h1>Reloj digital</h1>
+<input id="cadena" size=8>
+<br>
+<input type="button" onclick="parar()" value="Para el reloj">
+</body>
+</html>

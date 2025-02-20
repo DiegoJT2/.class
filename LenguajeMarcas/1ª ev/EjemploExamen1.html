@@ -1,0 +1,28 @@
+<html>
+<head>
+	<title>Examen1</title>
+
+<style type="text/css">
+img{position:absolute}
+input{position:absolute}
+</style>
+<script language="JavaScript">
+var numero = 1;
+function siguiente(){
+	numero++;
+	if(numero>4)numero=1;
+	imagen.src="imagenes/fondo"+numero+".jpg";
+}
+function anterior(){
+	numero--;
+	if(numero==0)numero=4;
+	imagen.src="imagenes/fondo"+numero+".jpg";
+}
+</script>
+</head>
+<body>
+<img src="imagenes/fondo1.jpg" id="imagen" style="left:400px; top:50" width="150">
+<input type="button" value="Siguiente" style="left:475px; top:300" onclick="siguiente()">
+<input type="button" value="Anterior" style="left:400px; top:300" onclick="anterior()">
+</body>
+</html>

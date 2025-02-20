@@ -1,0 +1,27 @@
+<html>
+<head>
+	<title>Mostrar la posición del ratón</title>
+
+<style type="text/css">
+img{position:absolute}
+</style>
+<script type="text/javascript" src="jquery-1.11.2.min.js"></script>
+<script language="JavaScript">
+	$(document).ready(function(){	//ready=onload	$(nombre sin comillas si ya estaba creado ej:window/document/...)	$("div/img/...")	$("#nombre")a un objeto unico como id/value
+		$("#texto").text("Buenos dias, caballeros!!!");
+		$("#texto2").html("<input type=button value='Hola que tal'>");
+		$(document).mousemove(function(event){
+			$("#texto3").text(event.clientX + " - " + event.clientY);
+			$("#texto4").text(event.pageX + " - " + event.pageY);
+
+		});
+	});
+</script>
+</head>
+<body>
+<div id="texto"></div>
+<div id="texto2"></div>
+<div id="texto3"></div>
+<div id="texto4"></div>
+</body>
+</html>

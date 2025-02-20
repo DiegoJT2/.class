@@ -1,0 +1,54 @@
+<!-- get o post para enviar datos-->
+<html>
+<head>
+	<title>Trabajando con formularios</title>
+</head>
+<body>
+<h1 align="center">FORMULARIO</h1>
+<form action="programa.php" method="post">
+<table align="center" border="1" cellspacing="5">
+<tr>
+	<td align="right">Introduce tu nombre</td>
+	<td><input type="text" size="50" maxlength="20" id="nombre" name="nombre"></td>
+</tr>
+<tr>
+	<td align="right">Provincia</td>
+	<td><select name="Provincia">
+		<option value="50">Zaragoza</option>
+		<option value="44">Teruel</option>
+		<option value="22" selected>Huesca</option>
+	</select></td>
+
+</tr>
+<tr>
+	<td align="right">Edad: </td>
+	<td>
+		Mayor de 60 <input type="radio" name="edad" value="1">
+		Entre 18 y 60 <input type="radio" name="edad" value="2">
+		Menor de 18 <input type="radio" name="edad" value 3>
+	</td>
+</tr>
+<tr>
+	<td align="right">Deportes: </td>
+	<td>
+		Balonmano <input type="checkbox" name="deportes" value="1">
+		Fútbol <input type="checkbox" name="deportes" value="2">
+		Hípica <input type="checkbox" name="deportes" value 3>
+	</td>
+</tr>
+<tr>
+	<td align="right">Comentario: </td>
+	<td>
+	<textarea name="comentario" cols="40" rows="4">
+	Escribe un comentario...
+	</textarea>
+	</td>
+</tr>
+<tr>
+	<td><input type="reset" value="Limpiar"></td>
+	<td><input type="submit" value="Enviar"></td>
+</tr>
+</table>
+</form>
+</body>
+</html>

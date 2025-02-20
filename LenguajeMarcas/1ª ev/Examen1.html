@@ -1,0 +1,68 @@
+<head>
+    <title>Examen1 Diego Jaraba</title>
+    <style>
+body{position:absolute}
+body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin:0;
+
+        }
+        .centered-div {
+            width: 300px;
+            height: 200px;
+            color: white;
+            display: flex;
+            justify-content: center; 
+            align-items: center;
+            border-radius: 10px;
+        }
+        #container {
+            width: 400px;
+            height: 300px;
+            border: 2px solid #000;
+            position: relative;
+            overflow: hidden;
+        }
+        #moverImagen {
+            width: 50px;
+            position: absolute;
+            top:0;
+            left:0;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+	<img id="moverImagen" src="imagenes/avion.jpg" value="Mover Imagen">
+    </div>
+
+    <script>
+	const imagen = document.getElementById('moverImagen');
+	const container = document.getElementById('container');
+
+	document.addEventListener('keydown', function(event) {
+		const step = 10; // Number of pixels to move
+		let top = parseInt(window.getComputedStyle(imagen).top);
+		let left = parseInt(window.getComputedStyle(imagen).left);
+
+            switch(event.key) {
+                case 'ArrowUp':
+			if (top > 0) imagen.style.top = (top - step) + 'px';
+				break;
+                case 'ArrowDown':
+			if (top < (container.clientHeight - imagen.clientHeight)) imagen.style.top = (top + step) + 'px';
+				break;
+		case 'ArrowLeft':
+			if (left > 0) imagen.style.left = (left - step) + 'px';
+				break;
+		case 'ArrowRight':
+			if (left < (container.clientWidth - imagen.clientWidth)) imagen.style.left = (left + step) + 'px';
+				break;
+            }
+        });
+    </script>
+</body>
+</html>

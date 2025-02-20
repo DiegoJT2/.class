@@ -1,0 +1,43 @@
+<html>
+<head>
+	<title>Tres en raya (fase 1)</title>
+<style type="text/css">
+.val{
+	width:30;
+	height:35;
+	background-color:yellow
+}
+.noval{
+	width:30;
+	height:35;
+	background-color:lime
+}
+</style>
+<script language="JavaScript">
+var n=0;
+function cambiar(){
+	if(event.srcElement.tagName=="TD"){//ClassName=="val"
+		if(n==0)
+			event.srcElement.innerHTML="<img src=imagenes/cruz.jpg height=35 width=30>";
+		else
+			event.srcElement.innerHTML="<img src=imagenes/circulo.webp height=35 width=30>";
+	n=(n+1)%2;
+	}
+}
+</script>
+</head>
+<body onclick="cambiar()">
+<h1 align="center"> Juego de las tres en raya</h1>
+<table align="center" border="5" cellspacing="5">
+<tr>
+	<td class="val"></td><td class="val"></td><td class="val"></td>
+</tr>
+<tr>
+	<td class="val"></td><td class="val"></td><td class="val"></td>
+</tr>
+<tr>
+	<td class="val"></td><td class="val"></td><td class="val"></td>
+</tr>
+</table>
+</body>
+</html>

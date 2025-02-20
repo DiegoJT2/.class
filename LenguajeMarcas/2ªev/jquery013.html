@@ -1,0 +1,23 @@
+<html>
+<head>
+	<title>Visualizar - Ocultar</title>
+
+<script type="text/javascript" src="jquery-1.11.2.min.js"></script>
+<script>
+$(document).ready(function(event){
+	$("#ocultar").click(function(event){
+		$(".imagen").hide(4000);
+	});
+	$("#mostrar").click(function(event){
+		$(".imagen").show(4000);
+	});
+});
+</script>
+</head>
+<body>
+<img src="imagenes/papelera.jpg" class="imagen">
+<br><br><br><br>
+<input type="button" id="ocultar" value="Click para ocultar elementos">
+<input type="button" id="mostrar" value="Click para mostrar elementos">
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!--get devolver, set modificar-->
+<!--(condicion)"true"?____"false":____-->
+<html>
+<head>
+       <title>Guillermo Tell</title>
+
+<style type="text/css">
+img{position:absolute}
+</style>
+<script language="JavaScript">
+function moverR(){
+	robin.style.top=event.y-75;
+}
+function moverG(){
+	globo.style.top = parseInt(globo.style.top)-3;
+	if(parseInt(globo.style.top)<-100) globo.style.top=700;
+		flecha.style.left=parseInt(flecha.style.left)+5;
+}
+function dispararF(){
+	flecha.style.left="80px";
+	flecha.style.top=event.y-40;
+	if(flecha.style.top==globo.style.top)
+		globo.style.display="none";
+}
+</script>
+</head>
+<body onmousemove="moverR()" onload="setInterval('moverG()',50)" onclick="dispararF()">
+<img id="robin" src="imagenes/robin.png" height=150 style="left:20px">
+<img id="globo" src="imagenes/globo.jpg" style="display:''; left:1300px; top:700px" width="50">
+<img id="flecha" src="imagenes/flecha.png" style="left:80px; top:-100px" width="50">
+</body>
+</html>

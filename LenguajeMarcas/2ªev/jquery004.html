@@ -1,0 +1,47 @@
+<html>
+<head>
+	<title>Eventos en general</title>
+
+<script type="text/javascript" src="jquery-1.11.2.min.js"></script>
+<script language="JavaScript">
+	$(document).ready(function(){
+		$(document).on("mousemove", function(e){
+			$("#divCoordenadas").html("<strong>" + e.pageX + "</strong> - <strong>" + e.pageY + "</strong>");
+		});//eliminar el menu conextual (click derecho)
+		$(document).on("contextmenu", function(e){
+			e.preventDefault();
+			$("#divEstado").html("<strong>Click derecho</strong>");
+		});
+		$(document).on("click", function(e){
+			$("#divEstado").html("<strong>Click izquierdo</strong>");
+		});
+		$("#divScroll").on("scroll", function(e){
+			$("#divEstado").html("<strong>Scroll detectado</strong>");
+		});
+	});
+</script>
+<style type="text/css">
+#divScroll{margin:20px 0; padding:10px; height:100px; overflow-y:scroll; border-radius:5px; box-shadow:1px 1px 10px #C0C0C0; float:right}
+#divCoordenadas{border:solid 1px #CCC; padding:10px; width:200px; text-align:center; border-radius:5px; box-shadow:1px 1px 10px #C0C0C0; float:left}
+#divEstado{padding:10px; width:200px; text-align:center; border-radius:5px; box-shadow:1px 1px 10px #C0C0C0; float:right}
+</style>
+</head>
+<body>
+<div id="divCoordenadas"></div>
+<div id="divEstado"></div>
+<div id="divScroll">
+<p>Un experto energético, sobre los retos del coche eléctrico y sus pros: "Es una solución ventajosa desde el punto de vista de la contaminación"</p>
+<p>Nemesio Fernández-Cuesta, ex secretario de Estado de Energía, analiza con Carlos Herrera en 'Herrera en COPE' los pros de los coches eléctricos y presenta su último libro</p>
+<p>Mazón destituye a Salomé Pradas, hasta ahora consejera de Justicia e Interior, por la gestión de la DANA</p>
+<p>A partir de ahora, la consejería se escinde y habrá un departamento de emergencias</p>
+
+<p>Redacción Digital</p>
+<p>1 min</p>
+<p>La vicepresidenta tercera del Gobierno, Teresa Ribera (c), que comparece este miércoles en el Congreso y el Senado para ofrecer sus explicaciones sobre su gestión de la dana</p>
+<p>Desbloqueado el acuerdo que hará a Ribera vicepresidenta de la Comisión Europea</p>
+<p>Los grupos de la coalición europarlamentaria entre populares, socialdemócratas y liberales han llegado este miércoles a un acuerdo para desbloquear la formación de la próxima Comisión Europea</p>
+
+<p>Agencia EFE</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<html>
+<head>
+	<title>Gestor de tareas</title>
+
+<script type="text/javascript" src="jquery-1.11.2.min.js"></script>
+<style>
+	.completada{text-decoration: line-through; color:gray}´
+	ul{list-style-type:none}
+	li{padding:5px; cursor:pointer}
+	#addTarea, #borrarTareas{margin:5px}
+</style>
+<script language="javascript">
+	$(document).ready(function(){
+		$("#addTarea").click(function(){
+			$("#lista").append("<li>"+$("#tarea").val()+"</li>");
+			$("#tarea").val("");
+		});
+		$("#lista").on("click", "li", function(){
+            $(this).toggleClass("completada");
+        });
+		$("#borrarTareas").click(function(){
+			$(".completada").remove();
+		});
+	});
+</script>
+</head>
+<body>
+<h1>Lista de tareas</h1>
+<input type="text" id="tarea" placeholder="Nueva tarea"/>
+<button id="addTarea">Aádir Tarea</button>
+<button id="borrarTareas">Eliminar Completadas</button>
+<ul id="lista">
+</ul>
+</body>
+</html>

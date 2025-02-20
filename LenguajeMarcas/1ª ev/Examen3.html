@@ -1,0 +1,58 @@
+<head>
+	<title>Examen3 Diego Jaraba</title>
+    <style>
+        table {
+            width: 200px;
+            border-collapse: collapse;
+            margin: 20px;
+        }
+        td {
+            border: 1px solid #ccc;
+            text-align: center;
+            vertical-align: middle;
+        }
+        img {
+            width: 100px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td><img src="imagenes/fondo1.jpg" alt="Imagen 1" onclick="moverImagen(this)"></td>
+        </tr>
+        <tr>
+            <td><img src="imagenes/fondo2.jpg" alt="Imagen 2" onclick="moverImagen(this)"></td>
+        </tr>
+        <tr>
+            <td><img src="imagenes/fondo3.jpg" alt="Imagen 3" onclick="moverImagen(this)"></td>
+        </tr>
+        <tr>
+            <td><img src="imagenes/fondo4.jpg" alt="Imagen 4" onclick="moverImagen(this)"></td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <td id="celda1"></td>
+        </tr>
+        <tr>
+            <td id="celda2"></td>
+        </tr>
+        <tr>
+            <td id="celda3"></td>
+        </tr>
+        <tr>
+            <td id="celda4"></td>
+        </tr>
+    </table>
+
+    <script>
+        function moverImagen(img) {
+            const destino = Math.floor(Math.random() * 4) + 1;
+            document.getElementById('celda' + destino).appendChild(img);
+        }
+    </script>
+</body>
+</html>

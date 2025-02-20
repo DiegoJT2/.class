@@ -1,0 +1,50 @@
+<html>
+<head>
+       <title>Cambiar de clase</title>
+<style type="text/css">
+.bloque1{
+		position:absolute;
+		width:300px;
+		top:50px;
+		left:20px;
+		background-color:lemonchiffon;
+}
+.bloque2{
+		position:absolute;
+		width:300px;
+		top:50px;
+		left:400px;
+		background-color:lightcoral;
+}
+</style>
+<script language="JavaScript">
+
+function cambiar(){
+	if(b1.className=="bloque1"){
+		b1.className="bloque2";
+		b2.className="bloque1";
+	}else{
+		b1.className="bloque1";
+		b2.className="bloque2";
+}
+
+}
+</script>
+</head>
+
+<body>
+<div id="b1" class="bloque1">
+<img src="imagenes/messi.webp" height=150 style="margin:20px">
+<p align="justify style="margin:20px">
+Lionel Andrés Messi Cuccittini (Rosario, 24 de junio de 1987), conocido como Leo Messi, es un futbolista argentino que juega como delantero o centrocampista. Desde 2023, integra el plantel del Inter Miami de la MLS canadoestadounidense. Es también internacional con la selección de Argentina, de la que es capitán.
+</p>
+</div>
+<div id="b2" class="bloque2">
+<img src="imagenes/vinicius.jpg" height=150 style="margin:20px">
+<p align="justify" style="margin:20px">
+Cristiano Ronaldo dos Santos Aveiro (Funchal, Madeira; 5 de febrero de 1985) es un futbolista portugués. Juega como extremo izquierdo o delantero y su equipo actual es el Al-Nassr F. C. de la Liga Profesional Saudí.19​ Es internacional absoluto con la selección de Portugal, de la cual es capitán, máximo goleador histórico y jugador con más presencias con 214 partidos, logro alcanzado en las eliminatorias para la Eurocopa 2024, reconocido por el Libro Guinness de los récords.20​
+</p>
+</div>
+<input type="button" value="intercambio" onclick="cambiar()">
+</body>
+</html>

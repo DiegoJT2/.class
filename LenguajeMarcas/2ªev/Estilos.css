@@ -1,0 +1,34 @@
+ul{
+	list-style:none;
+	padding:0px;
+	text-align:center;
+}
+#menu{
+	width:200px;
+}
+#menu>li{/* hijos directos */
+	background-color:#4bcdc8;
+	border:1px outset #4bcdc8;
+	padding:5px;
+	position:relative;
+}
+.submenu{
+	position:absolute;
+	top:0px;
+	left:199px;
+	display:none;
+}
+.submenu>li{
+	background-color:#189a96;
+	border:1px outset #189a96;
+	width:180px;
+	padding:2px;
+}
+#menu li:hover{/*cuando el mouse esta sobre el li */
+	background-color:#089461;
+	color:white;
+	cursor:pointer;
+}
+#menu li:hover .submenu{/*sobre el objeto donde esta el raton se ve el submenu*/
+	display:block;
+}
