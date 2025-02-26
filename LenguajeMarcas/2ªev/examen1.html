@@ -1,0 +1,36 @@
+<html>
+<head>
+	<title>Ejercicio 1</title>
+
+<script type="text/javascript" src="jquery-1.11.2.min.js"></script>
+<style>
+	.completada{color:yellow}´
+	ul{list-style-type:none}
+	li{padding:5px; cursor:pointer}
+	#addTarea, #borrarTareas{margin:5px}
+</style>
+<script language="javascript">
+	$(document).ready(function(){
+		$("#lista").click(function(){
+			$("#lista").on("click", "li", function(){
+				$(this).toggleClass("completada");
+			});
+			$("#ocultarElementos").click(function(){
+                $(".completada").hide();
+                $(".completada").removeClass("completada");
+            });
+		});
+	});
+</script>
+</head>
+<body>
+<ul id="lista">
+	<li>Elemento 1</li>
+	<li>Elemento 2</li>
+	<li>Elemento 3</li>
+	<li>Elemento 4</li>
+	<li>Elemento 5</li>
+</ul>
+<button id="ocultarElementos">Ocultar elementos seleccionados</button>
+</body>
+</html>
