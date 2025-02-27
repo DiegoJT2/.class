@@ -12,7 +12,7 @@ import java.awt.MenuItem;
 
 
 public class DibujarApp extends Frame{
-    
+    MiCanvas canvas;
     
     public static void main (String arg[]){
         DibujarApp app = new DibujarApp();
@@ -28,6 +28,8 @@ public class DibujarApp extends Frame{
     }
     public void setup(){
         setupMenuBar();
+        canvas = new MiCanvas(DosPuntos.LINEA);
+        this.add("Center", canvas);
     }
     private void setupMenuBar() {
         MenuBar menuBar = new MenuBar();
@@ -47,18 +49,29 @@ public class DibujarApp extends Frame{
         if(ev.id == Event.WINDOW_DESTROY){
             System.exit(0);
             return true;
-        }else if(ev.id == Event.ACTION_EVENT){
+        }else if(ev.id == Event.ACTION_EVENT)
             if(ev.target instanceof MenuItem){
                 if(ev.arg.equals("Salir")){
                     System.exit(0);
                     return true;
                 }
-            }else if(ev.target instanceof MenuItem)
-                if(ev.arg.equals("Abrir"))
-                    ;
+                else if(ev.arg.equals("Línea")){
+                    canvas.setTipo(DosPuntos.LINEA);
+                    return true;
+                }
+                else if(ev.arg.equals("Óvalo")){
+                    canvas.setTipo(DosPuntos.OVALO);
+                    return true;
+                }
+                else if(ev.arg.equals("Rectángulo")){
+                    canvas.setTipo(DosPuntos.RECTANGULO);
+                    return true;
+                }else if(ev.arg.equals("Nuevo")){
+                    canvas.getGraphics().clearRect(0, 0, 400, 400);//borra Graphics
+                    canvas.getLista().clear();//borra la lista
+                    return true;
+                }
         }
         return false;
     }
-
-
 }

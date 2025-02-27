@@ -64,7 +64,7 @@ public class Restaurante extends Frame{
             String frase = chComida.getSelectedItem() + ": ";
             String elecciones[] = presentar.getSelectedItems();
             for(int i=0; i<elecciones.length; i++)
-                frase += " " + elecciones[i];
+                frase += " " + elecciones[i] + ",";
             texto.setText(frase);
         }
         return false;
