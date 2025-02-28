@@ -4,11 +4,11 @@ DELETE Clientes FROM videoclub.Clientes WHERE CODIGOCLIENTE NOT LIKE "Zaragoza";
 
 /*42. Borrar todos los registros de Peliculas cuyo precio sea inferior a 15 €.*/
 
-DELETE FROM videoclub.peliculas WHERE precio < 15;
+DELETE Peliculas FROM videoclub.peliculas WHERE precio < 15;
 
 /*43. Borrar todos los registros de películas que empiecen por H.*/
 
-DELETE FROM videoclub.Peliculas WHERE TITULO LIKE "%H%";
+DELETE Peliculas FROM videoclub.Peliculas WHERE TITULO LIKE "%H%";
 
 /*44. Borrar todos los registros de películas cuya modalidad sea ESTRENO*/
 

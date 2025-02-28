@@ -26,7 +26,7 @@ UPDATE voluntarios_OLD SET edad = TIMESTAMPDIFF(YEAR, fechaNacimiento, '1990-12-
 /*70. Seleccionar el campo de pais mostrando solo aquellos diferentes. Crear la
 tabla de paises con los registros seleccionados. (Voluntarios_OLD)*/
 
-CREATE TABLE paises AS SELECT DISTINCT pais FROM voluntarios;
+CREATE TABLE paises AS SELECT DISTINCT pais FROM Voluntarios_OLD;
 
 /*71. Seleccionar el campo de pais y provincia mostrando sólo aquellas
 provincias de España (las provincias no tienen que repetirse). Crear una
