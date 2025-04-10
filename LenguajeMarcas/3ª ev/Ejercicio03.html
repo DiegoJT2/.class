@@ -1,0 +1,37 @@
+<html>
+<head>
+	<title>Editor con HTML5</title>
+
+<script type="text/javascript" src="jquery-1.11.2.min.js"></script>
+<link rel="stylesheet" href="Estilos2.css">
+<script type="text/javascript" src="editor.js"></script>
+</head>
+<body>
+    <div id="principal">
+        <h2>Mensajes publicitarios</h2>
+        <div id="Mensajes"></div>
+        <div id="editor">
+            <h3>Publica aquí tu mensaje</h3>
+            <div id="botones">
+                <img src="imagenes/iconos/negrita.jpg" class="boton" onclick="negrita()">
+                <img src="imagenes/iconos/cursiva.jpg" class="boton" onclick="cursiva()">
+                <img src="imagenes/iconos/subrayado.jpg" class="boton" onclick="subrayado()">
+                <img src="imagenes/iconos/alini.jpg" class="boton" onclick="alineai()">
+                <img src="imagenes/iconos/alinc.jpg" class="boton" onclick="alineac()">
+                <img src="imagenes/iconos/alind.jpg" class="boton" onclick="alinead()">
+                <img src="imagenes/iconos/alinf.jpg" class="boton" onclick="alineaf()">
+                <img src="imagenes/iconos/lno.jpg" class="boton" onclick="listano()">
+                <img src="imagenes/iconos/lor.jpg" class="boton" onclick="listao()">
+                <img src="imagenes/iconos/subi.jpg" class="boton" onclick="subi()">
+                <img src="imagenes/iconos/supi.jpg" class="boton" onclick="supi()">
+                <img src="imagenes/iconos/fco.jpg" class="boton" onclick="fontcolor()">
+                <img src="imagenes/iconos/bco.jpg" class="boton"onclick="backcolor()">
+                <img src="imagenes/iconos/imagen.jpg" class="boton" onclick="insertarimg()">
+                <img src="imagenes/iconos/hipervinculo.jpg" class="boton" onclick="hipervinculo()">
+            </div>
+            <div id="contenido" contenteditable="true"></div>
+            <input type="button" value="PUBLICAR" onclick = "publicar()">
+        </div>
+    </div>
+</body>
+</html>

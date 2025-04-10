@@ -1,0 +1,41 @@
+<html>
+<head>
+	<title>Formulario para insertar un contacto en IndexedDB</title>
+</head>
+<body>
+    <h1>Insertar contacto</h1>
+    <form id="contactoForm">
+        <label for="id">ID:</label><!--for vincula el id-->
+        <input id="id" name="id" required><br><!--id para scrip name para leer desde java,etc-->
+        <label for="nombre">Nombre:</label>
+        <input id="nombre" name="nombre" required><br>
+        <button type="submit">Agregar contacto</button>
+    </form>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded',function(){//cuando se carga la pagina
+    //Abrir la base de datos, si no existe la crea
+    var request=window.indexedDB.open("contactos", 1);
+    request.onerror=function(event){//si hay error al abrir la base de datos
+        console.log("Error al abrir la base de datos");
+    }
+    request.onsuccess=function(event){//si se abre correctamente la base de datos
+        var db=event.target.result;//result es la base de datos
+        var form=document.getElementById("contactoForm");
+        form.addEventListener('submit',function(e){//hacer click en submit del objeto formulario
+            e.preventDefault();//evitar que se recargue la pagina
+            var transicion=db.transaction(['contactos'],'readwrite');//abrir la base de datos en modo lectura y escritura
+            var store=transaction.objectStore('contactos');//abrir la tabla contactos
+            var contacto={id:form.id.value,nombre:form.nombre.value};//crear un objeto contacto con los datos del formulario
+            var addRequest=store.add(contacto);//añadir el contacto a la tabla contactos
+        });
+    };
+    //Actualización de la versión
+    request.onupgradeneeded=function(event){//si se necesita actualizar la base de datos
+        var db=event.target.result;//result es la base de datos
+        var store=db.createObjectStore('contactos',{keyPath:'id'});//crear la tabla contactos con la clave id
+        store.createIndex('nombre','nombre',{unique:false});//crear un índice para el nombre
+    };
+});
+</script>
+</html>
