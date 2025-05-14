@@ -25,26 +25,22 @@ public class Caminar extends Applet implements Runnable {
         for(int i=0; i<fotogramas.length; i++)
             for(int j=0; j<fotogramas[i].length; j++)
                 fotogramas[i][j] = getImage(getCodeBase(), "Tercera/Ejercicio1/Sprites/"+lugares[i]+(j+1)+".gif");
-        da = new DibujoAnimado(fotogramas[0]);
+        da = new DibujoAnimado(fotogramas[GUERRILLERO]);
         this.setSize(300, 300);
     }
-
     public void update(Graphics g) {
         paint(g);
     }
-
     public void start() {
         animacion = new Thread(this);
         animacion.start();
     }
-
     public void paint(Graphics g) {
         noseve.setColor(Color.BLACK);
         noseve.fillRect(0, 0, 300, 300);
         da.paint(noseve, this);
         g.drawImage(imagen, 0, 0, this);
     }
-
     public void run() {
         do {
             da.update();

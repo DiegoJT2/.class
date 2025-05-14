@@ -11,12 +11,14 @@ public class Donut extends Rectangle{
     private Image imagen;
     Image reverso;
     private boolean destapada=false;
+    
     public Donut(int posX, int posY, Image img, Image rev){
         super(posX, posY, DIM, DIM);
         imagen=img;
         reverso=rev;
     }
     public void paint(Graphics g, Applet a){
+        g.drawRect(x, y, width, height);
         if(destapada)
             g.drawImage(imagen, x, y, width, height, a);
         else

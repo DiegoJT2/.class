@@ -19,7 +19,7 @@ public class Bala extends Rectangle{
     }
     public boolean update(){
         y+=VELY;
-        return y < 0;
+        return y < -(5+width);
     }
     
 }

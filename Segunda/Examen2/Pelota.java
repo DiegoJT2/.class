@@ -14,8 +14,8 @@ public class Pelota extends Rectangle {
         super(150, 150, 0, 0);
         int radio = (int)(Math.random()*30)+20;
         this.setSize(radio, radio);
-        this.velX = (int)(Math.random()*11)-5;
-        this.velY = (int)(Math.random()*11)-5;
+        this.velX = (int)(Math.random()*5)-2;
+        this.velY = (int)(Math.random()*5)-2;
         color = colores[(int)(Math.random()*colores.length)];
         numero = 1;
     }
@@ -24,19 +24,11 @@ public class Pelota extends Rectangle {
         g.fillOval(x, y, width, height);
         String num = Integer.toString(numero);
         g.setColor(Color.BLACK);
-        int fontSize = width / 2;
-        int textWidth =num.length()*fontSize / 2;
-        int posX = x + (width - textWidth) / 2;
-        int posY = y + (height + fontSize / 2) / 2;
-        g.drawString(num, posX, posY);
+        g.drawString(num, x+15, y+15);
     }
     
     public void update() {
         x += velX;
         y += velY;
-        if (x <= 0 || x >= 300 - height)
-            velX = -velX;
-        if (y <= 0 || y >= 300 - height)
-            velY = -velY;
     }
 }
