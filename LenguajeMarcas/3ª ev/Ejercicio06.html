@@ -24,7 +24,7 @@
         var form=document.getElementById("contactoForm");
         form.addEventListener('submit',function(e){//hacer click en submit del objeto formulario
             e.preventDefault();//evitar que se recargue la pagina
-            var transicion=db.transaction(['contactos'],'readwrite');//abrir la base de datos en modo lectura y escritura
+            var transaction=db.transaction(['contactos'],'readwrite');//abrir la base de datos en modo lectura y escritura
             var store=transaction.objectStore('contactos');//abrir la tabla contactos
             var contacto={id:form.id.value,nombre:form.nombre.value};//crear un objeto contacto con los datos del formulario
             var addRequest=store.add(contacto);//añadir el contacto a la tabla contactos
@@ -34,7 +34,6 @@
     request.onupgradeneeded=function(event){//si se necesita actualizar la base de datos
         var db=event.target.result;//result es la base de datos
         var store=db.createObjectStore('contactos',{keyPath:'id'});//crear la tabla contactos con la clave id
-        store.createIndex('nombre','nombre',{unique:false});//crear un índice para el nombre
     };
 });
 </script>

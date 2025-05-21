@@ -11,14 +11,11 @@
 </style>
 <script language="javascript">
 	$(document).ready(function(){
-		$("#lista").click(function(){
-			$("#lista").on("click", "li", function(){
-				$(this).toggleClass("completada");
-			});
-			$("#ocultarElementos").click(function(){
-                $(".completada").hide();
-                $(".completada").removeClass("completada");
-            });
+		$("#lista li").click(function(){
+			$(this).toggleClass("completada");
+		});
+		$("#ocultarElementos").click(function(){
+			$("#lista li.completada").hide();
 		});
 	});
 </script>

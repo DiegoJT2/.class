@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda</title>
+    <style>
+        .product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Productos</h1>
+
+    <div id="product-list"></div>
+
+    <table id="cart-table" style="margin-top: 20px;">
+        <thead>
+            <tr><th>Carrito de la compra</th></tr>
+        </thead>
+        <tbody id="cart-body"></tbody>
+    </table>
+
+    <button onclick="submitSales()">Confirmar compra</button>
+
+    <script>
+        // Simulando una base de datos
+        const database = {
+            Ventas: []
+        };
+
+        // Simulando datos de productos
+        const productos = [
+            {id: 1, name: 'Manzana'},
+            {id: 2, name: 'Plátano'},
+            {id: 3, name: 'Naranja'},
+            {id: 4, name: 'Uva'},
+            {id: 5, name: 'Pera'},
+            {id: 6, name: 'Banana'},
+            {id: 7, name: 'Arándanos'},
+            {id: 8, name: 'Mandarina'},
+            {id: 9, name: 'Frambuesa'},
+            {id: 10, name: 'Fresa'}
+        ];
+
+        // Mostrar productos en la lista
+        productos.forEach(product => {
+            const li = document.createElement('li');
+            li.className = 'product';
+            li.textContent = product.name;
+            const button = document.createElement('button');
+            button.textContent = 'Agregar al Carrito';
+            button.onclick = () => addToCart(product);
+            li.appendChild(button);
+            document.getElementById('product-list').appendChild(li);
+        });
+
+        // Agregar producto al carrito
+        function addToCart(product) {
+            sessionStorage.setItem(`cart-${product.id}`, JSON.stringify(product));
+            updateCart();
+        }
+
+        // Actualizar el carrito
+        function updateCart() {
+            const cartItems = [];
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                if (key.startsWith('cart-')) {
+                    const productoString = sessionStorage.getItem(key);
+                    const product = JSON.parse(productoString);
+                    cartItems.push(product);
+                }
+            }
+
+            document.getElementById('cart-body').innerHTML = '';
+            cartItems.forEach(product => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                `;
+                document.getElementById('cart-body').appendChild(tr);
+            });
+        }
+
+        // Función para obtener el valor de una cookie
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        //Parte Examen3
+        // Confirmar compra y guardar en la tabla "Ventas"
+        function submitSales() {
+            if (getCookie('carrito_confirmado')){//Si existe 'carrito_confirmado'
+                alert('Ya has confirmado tu carrito recientemente');
+                return;
+            }
+            //Si no existe
+            const cartItems = [];
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                if (key.startsWith('cart-')) {
+                    const productString = sessionStorage.getItem(key);
+                    const product = JSON.parse(productString);
+                    cartItems.push(product);
+                }
+            }
+            for (const product of cartItems) {
+                database.Ventas.push({ id: product.id, nomProducto: product.name });
+            }
+
+            //Crea la cookie carrito_confirmado con una duración de 5 minutos
+            document.cookie = "carrito_confirmado=1; max-age=300";
+
+            //Vacía el carrito eliminando sessionStorage
+            sessionStorage.clear();
+            updateCart();
+
+            alert('¡Compra confirmada!');
+            console.log('Ventas realizadas:');
+            console.log(database.Ventas);
+        }
+
+        //Inicializar la tabla del carrito al cargar la página
+        updateCart();
+    </script>
+</body>
+</html>

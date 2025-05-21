@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login con Cookies</title>
+</head>
+<body>
+<form onsubmit="guardarCredenciales(); return false;">
+    Usuario: <input type="text" id="usuario"><br><br>
+    Contraseña: <input type="password" id="password"><br><br>
+    <button type="submit">Guardar</button>
+</form>
+<script>
+    function guardarCredenciales(){
+        numUsuario = usuario.value;
+        contra = password.value;
+        document.cookie = `usuario=${numUsuario}; max-age=3600; path=/`;
+        document.cookie = `password=${contra}; max-age=3600; path=/`;
+        alert("Credenciales guardadas en cookies!");
+    }
+</script>
+</body>
+</html>

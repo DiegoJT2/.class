@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito de la Compra IndexedDB</title>
+    <link rel="stylesheet" href="Estilos3.css">
+    <script>
+        let db;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Abrir la base de datos, si no existe la crea
+            let request = window.indexedDB.open("carrito", 1);
+            // Si hay error al abrir la base de datos
+            request.onerror = function (event) {
+                console.log("Error al abrir la base de datos");
+            };
+            // Si se abre correctamente la base de datos
+            request.onupgradeneeded = function (event) {
+                db = event.target.result;
+                if (!db.objectStoreNames.contains('carrito')) {
+                    db.createObjectStore('carrito', { keyPath: 'id' });
+                }
+            };
+            // Si se abre correctamente la base de datos la muestra
+            request.onsuccess = function (event) {
+                db = event.target.result;
+                mostrar();
+            };
+        });
+        // Función para mostrar el carrito
+        function mostrar() {
+            let cesta = document.getElementById("cesta");
+            cesta.innerHTML = "";
+            let transaction = db.transaction(['carrito'], 'readonly');
+            let store = transaction.objectStore('carrito');
+            let cursorRequest = store.openCursor();
+            let hayProductos = false;
+            let tabla = "<table class='pro' width='90%'><tr><th>PRODUCTO</th><th>UNIDADES</th><th>ELIMINAR</th></tr>";
+                
+            // Crear un cursor para recorrer los registros
+            cursorRequest.onsuccess = function (event) {
+                let cursor = event.target.result;
+                if (cursor) {
+                    hayProductos = true;
+                    tabla += "<tr><td>" + cursor.value.id + "</td><td>" + cursor.value.unidades + "</td><td><button onclick=\"eliminar('" + cursor.value.id + "')\">Quitar</button></td></tr>";
+                    cursor.continue();// Continuar con el siguiente registro
+                } else {
+                    tabla += "</table>";
+                    if (hayProductos) {
+                        cesta.innerHTML = tabla;
+                    } else {
+                        cesta.innerHTML = "<h5>No tienes productos en el carrito</h5>";
+                    }
+                }
+            };
+            // Si hay error al abrir el cursor
+            cursorRequest.onerror = function () {
+                cesta.innerHTML = "<h5>Error al leer el carrito</h5>";
+            };
+        }
+
+        function almacenar(producto) {
+            let transaction = db.transaction(['carrito'], 'readwrite');
+            let store = transaction.objectStore('carrito');
+            let getRequest = store.get(producto);
+
+            getRequest.onsuccess = function (event) {
+                let data = event.target.result;
+                if (data) {
+                    data.unidades += 1;
+                    store.put(data);
+                } else {
+                    store.add({ id: producto, unidades: 1 });
+                }
+            };
+
+            transaction.oncomplete = function () {
+                mostrar();
+            };
+        }
+
+        function eliminar(producto) {
+            let transaction = db.transaction(['carrito'], 'readwrite');
+            let store = transaction.objectStore('carrito');
+            let getRequest = store.get(producto);
+
+            getRequest.onsuccess = function (event) {
+                let data = event.target.result;
+                if (data) {
+                    if (data.unidades > 1) {
+                        data.unidades -= 1;
+                        store.put(data);
+                    } else {
+                        store.delete(producto);
+                    }
+                }
+            };
+
+            transaction.oncomplete = function () {
+                mostrar();
+            };
+        }
+    </script>
+</head>
+<body>
+    <div id="principal">
+        <h1>Carrito de la Compra</h1>
+        <div id="productos">
+            <table>
+                <tr><th>IMAGEN</th><th>DESCRIPCIÓN</th><th>COMPRAR</th></tr>
+                <tr>
+                    <td><img src="imagenes/asus.webp" alt="ASUS"></td>
+                    <td>Portátil ASUS TUF Gaming A15</td>
+                    <td><button onclick="almacenar('ASUS')">Comprar</button></td>
+                </tr>
+                <tr>
+                    <td><img src="imagenes/amd.webp" alt="AMD"></td>
+                    <td>Procesador AMD Ryzen 7 9800X3D</td>
+                    <td><button onclick="almacenar('AMD')">Comprar</button></td>
+                </tr>
+                <tr>
+                    <td><img src="imagenes/PcCom.webp" alt="PcCom"></td>
+                    <td>Ordenador Sobremesa PcCom</td>
+                    <td><button onclick="almacenar('PcCom')">Comprar</button></td>
+                </tr>
+                <tr>
+                    <td><img src="imagenes/monitor.webp" alt="AOC"></td>
+                    <td>Monitor AOC 24G4XE 23.8"</td>
+                    <td><button onclick="almacenar('AOC')">Comprar</button></td>
+                </tr>
+                <tr>
+                    <td><img src="imagenes/msi.webp" alt="MSI"></td>
+                    <td>RTX 5070 VENTUS 2X OC 12GB</td>
+                    <td><button onclick="almacenar('MSI')">Comprar</button></td>
+                </tr>
+            </table>
+        </div>
+        <div id="carrito">
+            <h4>Este es el carrito de la compra</h4>
+            <div id="cesta"></div>
+        </div>
+        <div id="pie"></div>
+    </div>
+</body>
+</html>

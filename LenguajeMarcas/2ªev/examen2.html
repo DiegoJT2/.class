@@ -6,20 +6,22 @@
 <script type="text/javascript" src="jquery-1.11.2.min.js"></script>
 <style type="text/css">
 	div {
-		position:absolute;
-		top:35px;
-		left:25px;
-		border:1px solid black;
+		border:2px solid black;
 		width:200px;
 		height:200px;
+		margin-top:20px;
 		background-color:red;
-		transition:background-color 2s ease;
+	}
+	button {
+		margin:5px;
+		padding:10px;
+		cursor:pointer;
 	}
 </style>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("button").click(function(){
-			var color = $(this).css("background-color");
+			let color = $(this).css("background-color");
 			$("div").fadeOut(2000, function() {
 				$(this).css("background-color", color).fadeIn(2000);
 			});

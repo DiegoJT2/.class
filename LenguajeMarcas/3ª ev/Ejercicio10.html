@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Lectura de Cookies</title>
+</head>
+<body>
+    <h1>Contenido de las Cookies</h1>
+    <ul id="lista"></ul>
+    
+    <script>
+        function mostrarCookies(){
+            lista.innerHTML = ""; // Limpiar la lista antes de mostrar las cookies
+            const cookies = document.cookie.split(";");//separa las cookies por el caracter ;
+            cookies.forEach(cookie=>{
+                //if(cookie.startsWith("usuario=") || cookie.startsWith("password=")) {// Filtrar y mostrar solo las cookies relevantes
+                    const[clave,valor]=cookie.split("=");//separa la cookie en clave y valor
+                    const item = document.createElement("li");//crea un elemento li
+                    item.textContent=`${clave}:${valor}`;//asigna el valor a la lista
+                    lista.appendChild(item);//añade el elemento li a la lista
+                //}
+            });
+        }
+        mostrarCookies();//llama a la funcion mostrarCookies al cargar la pagina
+    </script>
+</body>
+</html>

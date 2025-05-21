@@ -1,0 +1,135 @@
+<!--SessionStorage, IndexDB y Cookies-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TIENDA ONLINE IndexedDB</title>
+    <link rel="stylesheet" href="Estilos3.css" type="text/css">
+    <script>
+        let productosValidos = ["ASUS", "AMD", "PcCom", "AOC", "MSI"];
+
+        function mostrar(){
+            if(sessionStorage.length <= 1)
+                cesta.innerHTML = "<h5>No hay productos en el carrito</h5>";
+            else{
+                cesta.innerHTML = "<table class=pro width=90%><tr><th>PRODUCTO</th><th>UNIDADES</th><th>ELIMINAR</th></tr></table>";
+
+                for(i = 0; i < sessionStorage.length; i++)
+                    if (productosValidos.includes(sessionStorage.key(i))) // Verifica si el producto es válido
+                        cesta.innerHTML += "<table class=pro width=90%><tr><td>" + sessionStorage.key(i) + "</td><td>" + 
+                        sessionStorage.getItem(sessionStorage.key(i)) + 
+                        "</td><td><input type='button' value='Quitar' onclick=eliminar('" + sessionStorage.key(i) + "')></td></tr></table>";  
+            }   
+        }
+
+        function almacenar(codigo){
+            if(sessionStorage.getItem(codigo) == null)
+                sessionStorage.setItem(codigo, 1);
+            else 
+                sessionStorage.setItem(codigo, parseInt(sessionStorage.getItem(codigo)) + 1);
+            mostrar();
+        }
+
+        function eliminar(codigo){
+            if(sessionStorage.getItem(codigo) == 1)
+                sessionStorage.removeItem(codigo);
+            else
+                sessionStorage.setItem(codigo, parseInt(sessionStorage.getItem(codigo)) - 1);
+            mostrar();
+        }
+
+        let db; // Variable para la base de datos
+
+        document.addEventListener("DOMContentLoaded", function () { // Espera a que el DOM esté completamente cargado
+            const request = window.indexedDB.open('productos', 1);//subir la version de la base de datos si la carpeta tiene el mismo nombre
+
+            request.onerror = function () {
+                console.log("Error al abrir la base de datos");
+            };
+
+            request.onsuccess = function (event) {
+                db = event.target.result; // Asigna la base de datos a la variable db
+                mostrar();
+            };
+
+            request.onupgradeneeded = function (event) {
+                db = event.target.result;
+                var store = db.createObjectStore('productos', { keyPath: "id" }); // Crea un almacén de objetos (tabla) y la clave primaria
+            };
+        });
+
+        // Función para guardar el carrito en cookies (igual que en Mezcla13)
+        function guardarCarritoEnCookie() {
+            let carrito = {};
+            for(let i = 0; i < sessionStorage.length; i++) {
+                let key = sessionStorage.key(i);
+                if (productosValidos.includes(key)) {
+                    carrito[key] = sessionStorage.getItem(key);
+                }
+            }
+            document.cookie = "carrito=" + encodeURIComponent(JSON.stringify(carrito)) + ";path=/";
+        }
+
+        function pagar() {
+            // 1. Crear cookie que indica que se ha pagado
+            document.cookie = "pagado=true; max-age=120"; // Cookie válida por 2 minutos
+
+            // 2. Guardar el carrito en cookies (como en Mezcla13)
+            guardarCarritoEnCookie();
+
+            // 3. Vaciar carrito (borrar todos los objetos de la base de datos)
+            const tx = db.transaction(['productos'], 'readwrite');
+            const store = tx.objectStore('productos');
+            
+            for(i = 0; i < sessionStorage.length; i++)
+                if (productosValidos.includes(sessionStorage.key(i)))
+                    store.put({ id: sessionStorage.key(i), cantidad: sessionStorage.getItem(sessionStorage.key(i)) });
+
+            sessionStorage.clear(); // Limpia el sessionStorage
+
+            mostrar(); // Refresca la vista del carrito
+            
+        }
+    </script>
+</head>
+<body>
+    <div id="principal">
+        <h1>TIENDA ONLINE</h1>
+        <div id="productos">
+            <table>
+                <tr><th>IMAGEN</th><th>DESCRIPCIÓN</th><th>COMPRAR</th></tr>
+                <tr>
+                    <td><img src="imagenes/asus.webp"></td>
+                    <td>Portátil ASUS TUF GamingA15</td>
+                    <td><input type="button" value="Comprar" onclick="almacenar('ASUS')"></td>
+                </tr>
+                <tr>
+                    <td><img src="imagenes/amd.webp"></td>
+                    <td>Procesador AMD Ryzen 7 9800X3D</td>
+                    <td><input type="button" value="Comprar" onclick="almacenar('AMD')"></td>
+                </tr>
+                <tr>
+                    <td><img src="imagenes/PcCom.webp"></td>
+                    <td>Ordenador Sobremesa PcCom</td>
+                    <td><input type="button" value="Comprar" onclick="almacenar('PcCom')"></td>
+                </tr>
+                <tr>
+                    <td><img src="imagenes/monitor.webp"></td>
+                    <td>Monitor AOC 24G4XE 23.8"</td>
+                    <td><input type="button" value="Comprar" onclick="almacenar('AOC')"></td>
+                </tr>
+                <tr>
+                    <td><img src="imagenes/msi.webp"></td>
+                    <td>RTX 5070 VENTUS 2X OC 12GB</td>
+                    <td><input type="button" value="Comprar" onclick="almacenar('MSI')"></td>
+                </tr>
+            </table>
+        </div>
+        <div id="carrito">
+            <h4>Este es el carrito de la compra</h4>
+            <div id="cesta"></div>
+            <div id="total"></div>
+        </div>
+        <div id="pie"><input type="button" value="Pagar" onclick="pagar()" style="display:block; margin: 20px auto;"></div>
+    </div>
+</body>
+</html>

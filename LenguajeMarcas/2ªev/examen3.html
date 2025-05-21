@@ -5,8 +5,8 @@
 	<script type="text/javascript" src="jquery-1.11.2.min.js"></script>
 	<script language="JavaScript">
 		$(document).ready(function() {
-			var imageNames = ['deportes.png', 'musica.png', 'noticias.png', 'tecnologia.png'];
-			var images = [];
+			let imageNames = ['deportes.png', 'musica.png', 'noticias.png', 'tecnologia.png'];
+			let images = [];
 
 			$("table tr td").each(function(i){
 				$(this).click(function(){
@@ -24,16 +24,19 @@
 		.imagen {
 			width: 100px;
 			height: 100px;
+			padding: 2px;
 		}
 	</style>
 </head>
 <body>
 	<table align="center" border="5" cellspacing="5">
 		<tr>
-			<td></td><td></td>
+			<td></td>
+			<td></td>
 		</tr>
 		<tr>
-			<td></td><td></td>
+			<td></td>
+			<td></td>
 		</tr>
 	</table>
 </body>

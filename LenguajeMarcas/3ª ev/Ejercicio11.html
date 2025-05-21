@@ -1,0 +1,67 @@
+<html lang ="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Almacenamiento de Contactos con IndexedDB</title>
+    <script>
+        document.addEventListener('DOMContentLoaded',function(){//cuando se carga la pagina
+            //Abrir la base de datos, si no existe la crea
+            var request=window.indexedDB.open("contactos", 1);
+            
+            request.onerror=function(event){//si hay error al abrir la base de datos
+                console.log("Error al abrir la base de datos");
+            }
+            
+            request.onsuccess=function(event){//si se abre correctamente la base de datos
+                var db=event.target.result;//result es la base de datos
+
+                //Realizar la transacción de escritura en la base de datos
+                var transaction=db.transaction(['contactos'],'readwrite');//abrir la base de datos en modo lectura y escritura
+                var store=transaction.objectStore('contactos');
+                
+                //Inserción de registros
+                var contacto1={id:1,nombre:'Juan'};
+                var addRequest1=store.add(contacto1);//añadir el contacto a la tabla contactos
+                addRequest1.onsuccess=function(event){
+                    console.log("Contacto 1 añadido");
+                };
+                var contacto2={id:2,nombre:'Pepe'};
+                var addRequest2=store.add(contacto2);//añadir el contacto a la tabla contactos
+                addRequest2.onsuccess=function(event){
+                    console.log("Contacto 2 añadido");
+                };
+                // Crear un cursor para recorrer los registros
+                var cursorRequest = store.openCursor();
+                cursorRequest.onsuccess=function(event){
+                    var cursor = event.target.result;//result es el cursor
+                    if(cursor){
+                        console.log(`ID: ${cursor.value.id}, Nombre: ${cursor.value.nombre}`);
+                        cursor.continue();//continuar con el siguiente elemento
+                    }
+                };
+                
+                cursorRequest.onerror=function(event){//si hay error al abrir el cursor
+                    console.log("Error al abrir el cursor");
+                };
+            };
+            //Actualización de la versión
+            request.onupgradeneeded=function(event){//si se necesita actualizar la base de datos
+                var db=event.target.result;//result es la base de datos
+                var store=db.createObjectStore('contactos',{keyPath:'id'});//crear la tabla contactos con la clave id
+            };
+        });
+    </script>
+</head>
+<body>
+    <h1>Gestión de Contactos</h1>
+    <form id="formContacto">
+        <label for="id">ID:</label>
+        <input type="number" id="id" name="id" required>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <button type="submit">Añadir Contacto</button>
+    </form>
+    <button id="listarContactos">Listar Contactos</button>
+    <div id="resultado"></div>
+</body>
+</html>

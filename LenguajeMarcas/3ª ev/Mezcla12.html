@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<!--Este archivo HTML contiene un formulario para guardar credenciales en cookies,
+    un botón para mostrar las cookies guardadas y un formulario para gestionar contactos
+    utilizando IndexedDB. El código JavaScript maneja la lógica de almacenamiento y recuperación.-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Contactos y Cookies</title>
+</head>
+<body>
+    <h1>Gestión de Contactos y Cookies</h1>
+
+    <!-- Formulario para guardar cookies -->
+    <section>
+        <h2>Guardar Credenciales en Cookies</h2>
+        <form onsubmit="guardarCredenciales(); return false;">
+            Usuario: <input type="text" id="usuario" required><br><br>
+            Contraseña: <input type="password" id="password" required><br><br>
+            <button type="submit">Guardar en Cookies</button>
+        </form>
+    </section>
+
+    <!-- Mostrar cookies -->
+    <section>
+        <h2>Contenido de las Cookies</h2>
+        <ul id="listaCookies"></ul>
+        <button onclick="mostrarCookies()">Mostrar Cookies</button>
+    </section>
+
+    <!-- Gestión de contactos con IndexedDB -->
+    <section>
+        <h2>Gestión de Contactos</h2>
+        <form id="formContacto">
+            <label for="id">ID:</label>
+            <input type="number" id="id" name="id" required>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <button type="submit">Añadir Contacto</button>
+        </form>
+        <button id="listarContactos">Listar Contactos</button>
+        <ul id="contactosList"></ul>
+    </section>
+
+    <script>
+        // Guardar credenciales en cookies
+        function guardarCredenciales() {
+            const usuario = document.getElementById('usuario').value;
+            const password = document.getElementById('password').value;
+            document.cookie = `usuario=${usuario}; max-age=3600; path=/`;
+            document.cookie = `password=${password}; max-age=3600; path=/`;
+            alert("Credenciales guardadas en cookies!");
+        }
+
+        // Mostrar cookies
+        function mostrarCookies() {
+            const lista = document.getElementById('listaCookies');
+            lista.innerHTML = ""; // Limpiar la lista antes de mostrar las cookies
+            const cookies = document.cookie.split(";"); // Separar las cookies
+            cookies.forEach(cookie => {
+                const [clave, valor] = cookie.split("="); // Dividir clave y valor
+                const item = document.createElement("li");
+                item.textContent = `${clave.trim()}: ${valor}`;
+                lista.appendChild(item);
+            });
+        }
+
+        // Gestión de contactos con IndexedDB
+        document.addEventListener('DOMContentLoaded', function () {
+            const request = window.indexedDB.open("contactos", 1);
+
+            request.onerror = function () {
+                console.log("Error al abrir la base de datos");
+            };
+
+            request.onsuccess = function (event) {
+                const db = event.target.result;
+
+                // Añadir contacto
+                document.getElementById('formContacto').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const id = parseInt(document.getElementById('id').value);
+                    const nombre = document.getElementById('nombre').value;
+
+                    const transaction = db.transaction(['contactos'], 'readwrite');
+                    const store = transaction.objectStore('contactos');
+                    const contacto = { id, nombre };
+
+                    const addRequest = store.add(contacto);
+                    addRequest.onsuccess = function () {
+                        alert("Contacto añadido correctamente");
+                    };
+                    addRequest.onerror = function () {
+                        alert("Error al añadir el contacto");
+                    };
+                });
+
+                // Listar contactos
+                document.getElementById('listarContactos').addEventListener('click', function () {
+                    const transaction = db.transaction(['contactos'], 'readonly');
+                    const store = transaction.objectStore('contactos');
+                    const cursorRequest = store.openCursor();
+                    const contactosList = document.getElementById('contactosList');
+                    contactosList.innerHTML = ""; // Limpiar la lista antes de mostrar los contactos
+
+                    cursorRequest.onsuccess = function (event) {
+                        const cursor = event.target.result;
+                        if (cursor) {
+                            const li = document.createElement('li');
+                            li.textContent = `ID: ${cursor.value.id}, Nombre: ${cursor.value.nombre}`;
+                            contactosList.appendChild(li);
+                            cursor.continue();
+                        }
+                    };
+
+                    cursorRequest.onerror = function () {
+                        console.log("Error al abrir el cursor");
+                    };
+                });
+            };
+
+            request.onupgradeneeded = function (event) {
+                const db = event.target.result;
+                db.createObjectStore('contactos', { keyPath: 'id' });
+            };
+        });
+    </script>
+</body>
+</html>

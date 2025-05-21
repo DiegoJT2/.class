@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda</title>
+    <style>
+        .product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Productos</h1>
+
+    <div id="product-list"></div>
+
+    <button onclick="clearCart()">Vaciar Carrito</button>
+    <table id="cart-table" style="margin-top: 20px;">
+        <thead>
+            <tr><th>ID</th><th>Nombre del Producto</th></tr>
+        </thead>
+        <tbody id="cart-body"></tbody>
+    </table>
+
+    <button onclick="submitSales()">Realizar Ventas</button>
+
+    <script>
+        // Simulando una base de datos
+        const database = {
+            Ventas: []
+        };
+
+        // Simulando datos de productos
+        const products = [
+            {id: 1, name: 'Manzana'},
+            {id: 2, name: 'Plátano'},
+            {id: 3, name: 'Naranja'},
+            {id: 4, name: 'Uva'},
+            {id: 5, name: 'Pera'},
+            {id: 6, name: 'Banana'},
+            {id: 7, name: 'Arándanos'},
+            {id: 8, name: 'Mandarina'},
+            {id: 9, name: 'Frambuesa'},
+            {id: 10, name: 'Durazno'}
+        ];
+
+        // Mostrar productos en la lista
+        products.forEach(product => {
+            const li = document.createElement('li');
+            li.className = 'product';
+            li.textContent = product.name;
+            const button = document.createElement('button');
+            button.textContent = 'Agregar al Carrito';
+            button.onclick = () => addToCart(product);
+            li.appendChild(button);
+            document.getElementById('product-list').appendChild(li);
+        });
+
+        // Agregar producto al carrito
+        function addToCart(product) {
+            sessionStorage.setItem(`cart-${product.id}`, JSON.stringify(product));
+            updateCart();
+        }
+
+        // Actualizar el carrito
+        function updateCart() {
+            const cartItems = [];
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                if (key.startsWith('cart-')) {
+                    const productString = sessionStorage.getItem(key);
+                    const product = JSON.parse(productString);
+                    cartItems.push(product);
+                }
+            }
+
+            document.getElementById('cart-body').innerHTML = '';
+            cartItems.forEach(product => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                `;
+                document.getElementById('cart-body').appendChild(tr);
+            });
+        }
+
+        // Vaciar el carrito
+        function clearCart() {
+            sessionStorage.clear();
+            updateCart();
+        }
+
+        // Realizar ventas y guardar en la tabla "Ventas"
+        function submitSales() {
+            const cartItems = [];
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                if (key.startsWith('cart-')) {
+                    const productString = sessionStorage.getItem(key);
+                    const product = JSON.parse(productString);
+                    cartItems.push(product);
+                }
+            }
+
+            // Simulación de guardar en "Ventas"
+            for (const product of cartItems) {
+                database.Ventas.push({ id: product.id, nomProducto: product.name });
+            }
+
+            // Limpiar el carrito después de realizar las ventas
+            sessionStorage.clear();
+            updateCart();
+
+            console.log('Ventas realizadas:');
+            console.log(database.Ventas);
+        }
+    </script>
+</body>
+</html>

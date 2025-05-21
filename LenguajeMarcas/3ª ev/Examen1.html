@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Tienda</title>
+    <style>
+        .product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>TIENDA</h1>
+
+    <div id="product-list"></div>
+
+    <script>
+        const database = {
+            Ventas: []
+        };
+        const products = [
+            {id: 1, name: 'Manzana'},
+            {id: 2, name: 'Plátano'},
+            {id: 3, name: 'Naranja'},
+            {id: 4, name: 'Uva'},
+            {id: 5, name: 'Pera'},
+            {id: 6, name: 'Banana'},
+            {id: 7, name: 'Arándanos'},
+            {id: 8, name: 'Mandarina'},
+            {id: 9, name: 'Frambuesa'},
+            {id: 10, name: 'Fresa'}
+        ];
+        //Mostrar productos en la lista
+        products.forEach(product => {
+            const li = document.createElement('li');
+            li.className = 'product';
+            li.textContent = product.name;
+            document.getElementById('product-list').appendChild(li);
+        });
+    </script>
+</body>
+</html>

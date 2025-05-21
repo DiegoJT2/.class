@@ -1,0 +1,47 @@
+<html>
+<head>
+	<title>Leer de la base de datos IndexedDB</title>
+</head>
+<body>
+    <h1>Lista de Contactos</h1>
+    <ul id="contactosList"></ul>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded',function(){//cuando se carga la pagina
+    //Abrir la base de datos, si no existe la crea
+    var request=window.indexedDB.open("contactos", 1);
+
+    request.onerror=function(event){//si hay error al abrir la base de datos
+        console.log("Error al abrir la base de datos");
+    };
+    //si se abre correctamente la base de datos
+    request.onsuccess=function(event){
+        var db=event.target.result;//muestra la base de datos
+
+        //Obtener los datos de la base de datos
+        var transaction=db.transaction(['contactos'],'readonly');//abrir la base de datos en modo lectura
+        var store=transaction.objectStore('contactos');
+        var cursorRequest=store.openCursor();//abrir un cursor para recorrer la tabla contactos
+        
+        cursorRequest.onsuccess=function(event){
+            var cursor = event.target.result;//result es el cursor
+            if(cursor){
+                //Crear un elemento de lista para cada contacto
+                var li = document.createElement('li');//crear un elemento li
+                li.textContent=`ID: ${cursor.value.id}, Nombre: ${cursor.value.nombre}`;
+                contactosList.appendChild(li);//añadir el elemento li a la lista
+                cursor.continue();
+            }
+        };
+        cursorRequest.onerror=function(event){//si hay error al abrir el cursor
+            console.log("Error al abrir el cursor");
+        };
+    };
+    //Actualización de la versión
+    request.onupgradeneeded=function(event){//si se necesita actualizar la base de datos
+        var db=event.target.result;//result es la base de datos
+        var store=db.createObjectStore('contactos',{keyPath:'id'});//crear la tabla contactos con la clave id
+    };
+});
+</script>
+</html>
