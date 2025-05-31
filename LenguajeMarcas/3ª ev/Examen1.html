@@ -1,44 +1,100 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda</title>
-    <style>
-        .product {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
 <body>
-    <h1>TIENDA</h1>
-
-    <div id="product-list"></div>
+    <h1>Base de Datos Tienda</h1>
+    <div id="resultado"></div>
 
     <script>
-        const database = {
-            Ventas: []
+        // Abrir la base de datos
+        const request = indexedDB.open("Tienda", 1);
+
+        request.onerror = function(event) {
+            console.error("Error al abrir la base de datos", event);
         };
-        const products = [
-            {id: 1, name: 'Manzana'},
-            {id: 2, name: 'Plátano'},
-            {id: 3, name: 'Naranja'},
-            {id: 4, name: 'Uva'},
-            {id: 5, name: 'Pera'},
-            {id: 6, name: 'Banana'},
-            {id: 7, name: 'Arándanos'},
-            {id: 8, name: 'Mandarina'},
-            {id: 9, name: 'Frambuesa'},
-            {id: 10, name: 'Fresa'}
-        ];
-        //Mostrar productos en la lista
-        products.forEach(product => {
-            const li = document.createElement('li');
-            li.className = 'product';
-            li.textContent = product.name;
-            document.getElementById('product-list').appendChild(li);
-        });
+
+        request.onupgradeneeded = function(event) {
+            const db = event.target.result;
+
+            // Crear la tabla Productos
+            const storeProductos = db.createObjectStore("Productos", { keyPath: "id" });
+            storeProductos.createIndex("nomProducto", "nomProducto", { unique: false });
+
+            // Crear la tabla Ventas
+            const storeVentas = db.createObjectStore("Ventas", { keyPath: "id" });
+            storeVentas.createIndex("nomProducto", "nomProducto", { unique: false });
+        };
+
+        request.onsuccess = function(event) {
+            const db = event.target.result;
+            console.log("Base de datos abierta con éxito");
+
+            // Al cargar la página, cargar productos automáticamente
+            cargarProductos(db);
+        };
+
+        function cargarProductos(db) {
+            const transaction = db.transaction(["Productos"], "readwrite");
+            const store = transaction.objectStore("Productos");
+
+            // Limpiar la tabla antes de insertar para evitar duplicados
+            const clearRequest = store.clear();
+            clearRequest.onsuccess = function() {
+                // Productos hortofrutícolas
+                const productos = [
+                    { id: 1, nomProducto: "Manzana" },
+                    { id: 2, nomProducto: "Plátano" },
+                    { id: 3, nomProducto: "Naranja" },
+                    { id: 4, nomProducto: "Uva" },
+                    { id: 5, nomProducto: "Pera" },
+                    { id: 6, nomProducto: "Kiwi" },
+                    { id: 7, nomProducto: "Fresa" },
+                    { id: 8, nomProducto: "Sandía" },
+                    { id: 9, nomProducto: "Melón" },
+                    { id: 10, nomProducto: "Cereza" }
+                ];
+
+                productos.forEach(producto => {
+                    const request = store.add(producto);
+                    request.onsuccess = function() {
+                        console.log(`Producto ${producto.nomProducto} añadido con éxito`);
+                    };
+                    request.onerror = function(event) {
+                        console.error("Error al añadir el producto", event);
+                    };
+                });
+
+                transaction.oncomplete = function() {
+                    console.log("Todos los productos han sido añadidos");
+                    mostrarProductos(db);
+                };
+            };
+            clearRequest.onerror = function(event) {
+                console.error("Error al limpiar la tabla Productos", event);
+            };
+        }
+
+        function mostrarProductos(db) {
+            const transaction = db.transaction(["Productos"], "readonly");
+            const store = transaction.objectStore("Productos");
+            const resultadoDiv = document.getElementById("resultado");
+            resultadoDiv.innerHTML = "<h2>Productos en la tienda:</h2><ul>";
+
+            const request = store.openCursor();
+            request.onsuccess = function(event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    resultadoDiv.innerHTML += `<li>${cursor.value.nomProducto}</li>`;
+                    cursor.continue();
+                } else {
+                    resultadoDiv.innerHTML += "</ul>";
+                }
+            };
+        }
     </script>
 </body>
 </html>

@@ -15,120 +15,124 @@
 </head>
 <body>
     <h1>Lista de Productos</h1>
+    <ul id="product-list"></ul>
 
-    <div id="product-list"></div>
-
-    <table id="cart-table" style="margin-top: 20px;">
+    <h2>Carrito de la compra</h2>
+    <table id="cart-table" border="1">
         <thead>
-            <tr><th>Carrito de la compra</th></tr>
+            <tr>
+                <th>ID</th>
+                <th>Producto</th>
+            </tr>
         </thead>
         <tbody id="cart-body"></tbody>
     </table>
-
-    <button onclick="submitSales()">Confirmar compra</button>
+    <br>
+    <button onclick="confirmarCompra()">Confirmar compra</button>
 
     <script>
-        // Simulando una base de datos
-        const database = {
-            Ventas: []
+        let db;
+        window.onload = function() {
+            const request = indexedDB.open("Tienda", 1);
+
+            request.onsuccess = function(event) {
+                db = event.target.result;
+                mostrarProductos();
+                actualizarCarrito();
+            };
         };
 
-        // Simulando datos de productos
-        const productos = [
-            {id: 1, name: 'Manzana'},
-            {id: 2, name: 'Plátano'},
-            {id: 3, name: 'Naranja'},
-            {id: 4, name: 'Uva'},
-            {id: 5, name: 'Pera'},
-            {id: 6, name: 'Banana'},
-            {id: 7, name: 'Arándanos'},
-            {id: 8, name: 'Mandarina'},
-            {id: 9, name: 'Frambuesa'},
-            {id: 10, name: 'Fresa'}
-        ];
+        // Mostrar productos desde IndexedDB
+        function mostrarProductos() {
+            const transaction = db.transaction(["Productos"], "readonly");
+            const store = transaction.objectStore("Productos");
+            const lista = document.getElementById('product-list');
+            lista.innerHTML = "";
 
-        // Mostrar productos en la lista
-        productos.forEach(product => {
-            const li = document.createElement('li');
-            li.className = 'product';
-            li.textContent = product.name;
-            const button = document.createElement('button');
-            button.textContent = 'Agregar al Carrito';
-            button.onclick = () => addToCart(product);
-            li.appendChild(button);
-            document.getElementById('product-list').appendChild(li);
-        });
-
-        // Agregar producto al carrito
-        function addToCart(product) {
-            sessionStorage.setItem(`cart-${product.id}`, JSON.stringify(product));
-            updateCart();
+            store.openCursor().onsuccess = function(event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    const li = document.createElement('li');
+                    li.className = 'product';
+                    li.innerHTML = `
+                        <span>${cursor.value.nomProducto}</span>
+                        <button onclick='agregarAlCarrito(${cursor.value.id}, "${cursor.value.nomProducto}")'>Agregar al carrito</button>
+                    `;
+                    lista.appendChild(li);
+                    cursor.continue();
+                }
+            };
         }
 
-        // Actualizar el carrito
-        function updateCart() {
-            const cartItems = [];
+        // Agregar producto al carrito (sessionStorage)
+        function agregarAlCarrito(id, nomProducto) {
+            sessionStorage.setItem(`cart-${id}`, JSON.stringify({id, nomProducto}));
+            actualizarCarrito();
+        }
+
+        // Mostrar carrito desde sessionStorage
+        function actualizarCarrito() {
+            const tbody = document.getElementById('cart-body');
+            tbody.innerHTML = "";
             for (let i = 0; i < sessionStorage.length; i++) {
                 const key = sessionStorage.key(i);
                 if (key.startsWith('cart-')) {
-                    const productoString = sessionStorage.getItem(key);
-                    const product = JSON.parse(productoString);
-                    cartItems.push(product);
+                    const producto = JSON.parse(sessionStorage.getItem(key));
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${producto.id}</td><td>${producto.nomProducto}</td>`;
+                    tbody.appendChild(tr);
                 }
             }
-
-            document.getElementById('cart-body').innerHTML = '';
-            cartItems.forEach(product => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${product.id}</td>
-                    <td>${product.name}</td>
-                `;
-                document.getElementById('cart-body').appendChild(tr);
-            });
         }
 
-        // Función para obtener el valor de una cookie
+        // Obtener valor de una cookie
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
         }
-        //Parte Examen3
-        // Confirmar compra y guardar en la tabla "Ventas"
-        function submitSales() {
-            if (getCookie('carrito_confirmado')){//Si existe 'carrito_confirmado'
+
+        // Confirmar compra
+        function confirmarCompra() {
+            if (getCookie('carrito_confirmado')) {
                 alert('Ya has confirmado tu carrito recientemente');
                 return;
             }
-            //Si no existe
-            const cartItems = [];
+
+            // Recoger productos del carrito
+            const productos = [];
             for (let i = 0; i < sessionStorage.length; i++) {
                 const key = sessionStorage.key(i);
                 if (key.startsWith('cart-')) {
-                    const productString = sessionStorage.getItem(key);
-                    const product = JSON.parse(productString);
-                    cartItems.push(product);
+                    productos.push(JSON.parse(sessionStorage.getItem(key)));
                 }
             }
-            for (const product of cartItems) {
-                database.Ventas.push({ id: product.id, nomProducto: product.name });
+
+            if (productos.length === 0) {
+                alert('El carrito está vacío');
+                return;
             }
 
-            //Crea la cookie carrito_confirmado con una duración de 5 minutos
-            document.cookie = "carrito_confirmado=1; max-age=300";
+            // Insertar en la tabla Ventas
+            const transaction = db.transaction(["Ventas"], "readwrite");
+            const store = transaction.objectStore("Ventas");
+            productos.forEach(producto => {
+                store.add(producto);
+            });
 
-            //Vacía el carrito eliminando sessionStorage
-            sessionStorage.clear();
-            updateCart();
-
-            alert('¡Compra confirmada!');
-            console.log('Ventas realizadas:');
-            console.log(database.Ventas);
+            transaction.oncomplete = function() {
+                // Crear cookie 5 minutos
+                document.cookie = "carrito_confirmado=1; max-age=300; path=/";
+                // Vaciar carrito
+                sessionStorage.clear();
+                actualizarCarrito();
+                alert('¡Compra confirmada!');
+            };
+            transaction.onerror = function() {
+                alert('Error al guardar la compra');
+            };
         }
-
-        //Inicializar la tabla del carrito al cargar la página
-        updateCart();
     </script>
 </body>
 </html>
