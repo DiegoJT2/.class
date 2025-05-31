@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import OrdenesTable from "../../../components/lists/ordenesTable";
+import ComentariosOrden from "../../../components/lists/comtariosOrden";
 import Button from "../../../components/buttons/filtrar";
 import Button2 from "../../../components/buttons/añadir";
 import Link from 'next/link';
@@ -14,6 +14,7 @@ export default function OrdenesDeCompra() {
   const router = useRouter();
   const departmentId = params?.idDepartamento;
 
+  const [ordenExpandida, setOrdenExpandida] = useState(null);
   const [filterInput, setFilterInput] = useState('');
   const [filters, setFilters] = useState([]);
   const [capsulesData, setCapsulesData] = useState([]);
@@ -53,7 +54,7 @@ export default function OrdenesDeCompra() {
     });
   };
 
-  // Fetch de datos
+  // Fetch de datos de órdenes
   useEffect(() => {
     if (!departmentId) return;
 
@@ -72,7 +73,6 @@ export default function OrdenesDeCompra() {
           price: orden.Precio,
           tipo: orden.Tipo || '',
         }));
-
         setCapsulesData(formattedData);
         setFilteredData(filterData(formattedData));
         setError(null);
@@ -115,15 +115,15 @@ export default function OrdenesDeCompra() {
       {/* Filtros y botón agregar */}
       <div className="flex items-center gap-203 mb-4 ml-67">
         <div className="flex items-center gap-2">
-        <Input
-          placeholder="Busca etiquetas..."
-          value={filterInput}
-          onChange={(e) => setFilterInput(e.target.value)}
-        />
-        <Button onClick={handleAddFilter} className="flex items-center gap-2">
-          <Image src="/images/filtro.png" alt="foto" width={30} height={10} />
-          Filtrar
-        </Button>
+          <Input
+            placeholder="Busca etiquetas..."
+            value={filterInput}
+            onChange={(e) => setFilterInput(e.target.value)}
+          />
+          <Button onClick={handleAddFilter} className="flex items-center gap-2">
+            <Image src="/images/filtro.png" alt="foto" width={30} height={10} />
+            Filtrar
+          </Button>
         </div>
         <Link href={`/nuevaOrden/${departmentId}`}>
           <Button2 className="flex items-center gap-2 hover:bg-red-100 rounded-full">
@@ -147,9 +147,47 @@ export default function OrdenesDeCompra() {
         ))}
       </div>
 
-      {/* Tabla */}
+      {/* Tabla de órdenes con expansión de comentarios */}
       <div className="flex-1 overflow-auto ml-67">
-        <OrdenesTable data={filteredData} idDepartamento={departmentId} />
+        <table className="min-w-full bg-white">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Proveedor</th>
+              <th>Fecha</th>
+              <th>Precio</th>
+              <th>Tipo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.map((orden) => (
+              <React.Fragment key={orden.id}>
+                <tr
+                  className="cursor-pointer hover:bg-red-100"
+                  onClick={() => setOrdenExpandida(orden.id === ordenExpandida ? null : orden.id)}
+                >
+                  <td>{orden.id}</td>
+                  <td>{orden.proveedor}</td>
+                  <td>{orden.date}</td>
+                  <td>{orden.price}</td>
+                  <td>{orden.tipo}</td>
+                  <td>{orden.comment}</td>
+                </tr>
+                {ordenExpandida === orden.id && (
+                  <tr>
+                    <td colSpan={6}>
+                      <ComentariosOrden
+                        numeroCompra={orden.id}
+                        labelInput="Añadir un comentario"
+                      />
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
