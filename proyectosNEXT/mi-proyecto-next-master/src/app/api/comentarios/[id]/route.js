@@ -10,7 +10,7 @@ export async function DELETE(req, { params }) {
   return NextResponse.json({ ok: true });
 }
 
-// Para editar (opcional, ya lo tienes en el frontend)
+// Para editar comentarios
 export async function PUT(req, { params }) {
   const { id } = params;
   const { texto } = await req.json();
