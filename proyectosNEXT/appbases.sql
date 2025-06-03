@@ -73,6 +73,34 @@ INSERT INTO `Bolsa_Dinero` VALUES (1,1),(2,2);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `ComentarioOrden`
+--
+
+DROP TABLE IF EXISTS `ComentarioOrden`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ComentarioOrden` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `numero_compra` varchar(50) NOT NULL,
+  `texto` text NOT NULL,
+  `fecha` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `numero_compra_idx` (`numero_compra`),
+  CONSTRAINT `numero_compra` FOREIGN KEY (`numero_compra`) REFERENCES `Orden_Compra` (`numero_compra`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ComentarioOrden`
+--
+
+LOCK TABLES `ComentarioOrden` WRITE;
+/*!40000 ALTER TABLE `ComentarioOrden` DISABLE KEYS */;
+INSERT INTO `ComentarioOrden` VALUES (4,'OC0001','Bombillas LED','2025-05-31 20:07:27'),(5,'OC0004','Mesas BT4','2025-05-31 20:07:49');
+/*!40000 ALTER TABLE `ComentarioOrden` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Departamento`
 --
 
@@ -415,10 +443,6 @@ LOCK TABLES `Usuario` WRITE;
 INSERT INTO `Usuario` VALUES (1001,'Administrador','Guillermo','López',111222333,'1985-06-15','Todos','diegojaraba02@gmail.com','0c6d7c3d01ac01ed2b2eabd46409a801698a2a0b433228e94436dfb8be450242'),(1002,'Jefe','Marta','Fernández',444555666,'1990-09-21','Limitado','murciano.fagui24@zaragoza.salesianos.edu','3f08d63ac0df991ce8a57fb0550123fc5cf057f174d7305e7ba079a704e9a497');
 /*!40000 ALTER TABLE `Usuario` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'appbases'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -429,4 +453,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-20 12:51:31
+-- Dump completed on 2025-06-03  9:02:24
