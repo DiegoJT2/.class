@@ -6,47 +6,46 @@ export default function ComentariosOrden({ numeroCompra, labelInput = "Añadir u
   const [editandoId, setEditandoId] = useState(null);
   const [textoEditado, setTextoEditado] = useState("");
 
-  // Cargar comentarios
-  useEffect(() => {
-    fetch(`/api/comentarios?numeroCompra=${numeroCompra}`)
+  // Función única para recargar comentarios
+  const cargarComentarios = () => {
+    fetch(`/api/comentarOrden?numeroCompra=${numeroCompra}`)
       .then(res => res.json())
       .then(setComentarios);
+  };
+
+  // Cargar comentarios al montar o cambiar numeroCompra
+  useEffect(() => {
+    cargarComentarios();
   }, [numeroCompra]);
 
   // Añadir comentario
   const agregarComentario = async () => {
     if (!nuevoComentario.trim()) return;
-    await fetch(`/api/comentarios`, {
+    await fetch(`/api/comentarOrden`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ texto: nuevoComentario, numeroCompra }),
     });
     setNuevoComentario("");
-    // Recargar comentarios
-    fetch(`/api/comentarios?numeroCompra=${numeroCompra}`)
-      .then(res => res.json())
-      .then(setComentarios);
+    cargarComentarios();
   };
 
   // Eliminar comentario
   const eliminarComentario = async (id) => {
-    await fetch(`/api/comentarios/${id}`, { method: "DELETE" });
-    setComentarios(comentarios.filter(c => c.id !== id));
+    await fetch(`/api/comentarOrden/${id}`, { method: "DELETE" });
+    cargarComentarios();
   };
 
   // Editar comentario
   const guardarEdicion = async (id) => {
-    await fetch(`/api/comentarios/${id}`, {
+    await fetch(`/api/comentarOrden/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ texto: textoEditado }),
     });
     setEditandoId(null);
     setTextoEditado("");
-    // Recargar comentarios
-    fetch(`/api/comentarios?numeroCompra=${numeroCompra}`)
-      .then(res => res.json())
-      .then(setComentarios);
+    cargarComentarios();
   };
 
   return (
